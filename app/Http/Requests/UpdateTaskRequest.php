@@ -11,7 +11,8 @@ class UpdateTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $task = $this->route('task');
+        return $this->user() && $task && $this->user()->id === $task->user_id;
     }
 
     /**
@@ -22,7 +23,9 @@ class UpdateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'         => 'required|string|max:255',
+            'description'   => 'nullable|string',
+            'completed'     => 'sometimes|boolean',
         ];
     }
 }
